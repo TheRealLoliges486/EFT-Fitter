@@ -52,11 +52,11 @@ scaling = od()
 for stxs_bin in stxs_bins:
 
   scaling[stxs_bin] = od()
-  for poi in pois.keys(): scaling[stxs_bin][poi] = od()
+  for poi in list(pois.keys()): scaling[stxs_bin][poi] = od()
 
   # Quadratic
   fit.setLinearOnly(False)  
-  for poi in pois.keys(): 
+  for poi in list(pois.keys()): 
     scaling[stxs_bin][poi]['quad'] = od()
     c, mu = fit.scaling1D(poi,stxs_bin,npoints=1000)
     scaling[stxs_bin][poi]['quad']['c'] = c
@@ -64,7 +64,7 @@ for stxs_bin in stxs_bins:
  
   # Linear
   fit.setLinearOnly()
-  for poi in pois.keys():
+  for poi in list(pois.keys()):
     scaling[stxs_bin][poi]['lin'] = od()
     c,mu = fit.scaling1D(poi,stxs_bin,npoints=1000)
     scaling[stxs_bin][poi]['lin']['c'] = c
@@ -73,7 +73,7 @@ for stxs_bin in stxs_bins:
 # Mage graphs
 grs = od()
 for stxs_bin in stxs_bins:
-  for poi in pois.keys():
+  for poi in list(pois.keys()):
     grs['%s_vs_%s_quad'%(stxs_bin,poi)] = ROOT.TGraph()
     grs['%s_vs_%s_lin'%(stxs_bin,poi)] = ROOT.TGraph()
     for i in range(len(scaling[stxs_bin][poi]['quad']['c'])): grs['%s_vs_%s_quad'%(stxs_bin,poi)].SetPoint( grs['%s_vs_%s_quad'%(stxs_bin,poi)].GetN(),scaling[stxs_bin][poi]['quad']['c'][i], scaling[stxs_bin][poi]['quad']['mu'][i] )
@@ -138,11 +138,11 @@ h_axes.SetLineWidth(0)
 h_axes.Draw()
 
 for stxs_bin in stxs_bins:
-  for k, v in colorMap[stxs_bin].iteritems():
+  for k, v in colorMap[stxs_bin].items():
     getattr(grs["%s_vs_%s_quad"%(stxs_bin,poi)],"Set%s"%k)(v)
     getattr(grs["%s_vs_%s_lin"%(stxs_bin,poi)],"Set%s"%k)(v)
-  for k, v in styleMap['quad'].iteritems(): getattr(grs["%s_vs_%s_quad"%(stxs_bin,poi)],"Set%s"%k)(v)
-  for k, v in styleMap['lin'].iteritems(): getattr(grs["%s_vs_%s_lin"%(stxs_bin,poi)],"Set%s"%k)(v)
+  for k, v in styleMap['quad'].items(): getattr(grs["%s_vs_%s_quad"%(stxs_bin,poi)],"Set%s"%k)(v)
+  for k, v in styleMap['lin'].items(): getattr(grs["%s_vs_%s_lin"%(stxs_bin,poi)],"Set%s"%k)(v)
   grs["%s_vs_%s_quad"%(stxs_bin,poi)].Draw("Same C")
   grs["%s_vs_%s_lin"%(stxs_bin,poi)].Draw("Same C")
   
@@ -199,7 +199,7 @@ lat2.DrawLatex(pois[poi]['range'][1]+0.01*prange,0.9*hmax,"#color[15]{c_{max}}")
 
 # Create dummy graph for linear
 gr_lin_dummy = ROOT.TGraph()
-for k,v in styleMap['lin_dummy'].iteritems(): getattr(gr_lin_dummy,"Set%s"%k)(v)
+for k,v in styleMap['lin_dummy'].items(): getattr(gr_lin_dummy,"Set%s"%k)(v)
 
 leg = ROOT.TLegend(0.55,0.22,0.8,0.48)
 #leg = ROOT.TLegend(0.63,0.28,0.8,0.38)
